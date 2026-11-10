@@ -1,0 +1,6 @@
+@model List<RaceDay.MVC.Models.events>
+<h2>Organiser Dashboard</h2>
+<p>Total Events: <b>@ViewBag.TotalEvents</b> | Upcoming: <b>@ViewBag.Upcoming</b></p>
+<a asp-action="Create" class="btn btn-primary">+ Create New Event</a>
+<a asp-action="MyEvents" class="btn btn-secondary">Manage Events</a>
+
