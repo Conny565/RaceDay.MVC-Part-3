@@ -1,0 +1,18 @@
+@model List<RaceDay.MVC.Models.events>
+<h2>My Events</h2>
+<a asp-action="Create" class="btn btn-primary">+ Create Event</a>
+<table class="table">
+    <tr><th>Name</th><th>Date</th><th>Location</th><th></th></tr>
+    @foreach (var e in Model)
+    {
+        <tr>
+            <td>@e.name</td>
+            <td>@e.eventDate</td>
+            <td>@e.location</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@e.eventID">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@e.eventID">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
