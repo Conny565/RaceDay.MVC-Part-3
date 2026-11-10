@@ -1,0 +1,13 @@
+@model RaceDay.MVC.Models.Users
+<h2>Register</h2>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+<form method="post">
+    <div class="mb-3"><label>Full Name</label><input name="fullName" class="form-control" required /></div>
+    <div class="mb-3"><label>Email</label><input name="email" type="email" class="form-control" required /></div>
+    <div class="mb-3"><label>Password</label><input name="password" type="password" class="form-control" required /></div>
+    <button class="btn btn-success">Register</button>
+</form>
+<p>Already have an account? <a href="/Account/Login">Login here</a></p>
