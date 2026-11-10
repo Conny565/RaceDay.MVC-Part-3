@@ -1,0 +1,6 @@
+@testingPOE_HostAddress = http://localhost:5217
+
+GET {{testingPOE_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
