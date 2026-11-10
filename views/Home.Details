@@ -1,0 +1,10 @@
+@model RaceDay.MVC.Models.events
+
+<h2>@Model.name</h2>
+<p><strong>Description:</strong> @Model.description</p>
+<p><strong>Date:</strong> @Model.eventDate</p>
+<p><strong>Time:</strong> @Model.eventTime</p>
+<p><strong>Location:</strong> @Model.location</p>
+<p><strong>Type:</strong> @Model.eventType</p>
+
+<a asp-action="Index" class="btn btn-secondary">Back to Events</a>
