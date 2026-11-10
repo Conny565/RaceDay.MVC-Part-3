@@ -1,0 +1,46 @@
+@model List<RaceDay.MVC.Models.events>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="p-5 mb-4 text-white rounded-4 shadow" style="background: linear-gradient(135deg, #000000 0%, #0d6efd 100%);">
+    <div class="container">
+        <h1 class="display-5 fw-bold">RaceDay.MVC</h1>
+        <p class="fs-5 mb-3">Find your next race. Run Tembisa, Soweto, Pretoria and more.</p>
+        <a href="/Participant/Index" class="btn btn-primary btn-lg fw-bold">Browse All Events</a>
+        <a href="/Account/Register" class="btn btn-outline-light btn-lg ms-2">Join Now</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Upcoming Race Day Events</h2>
+        <span class="badge bg-primary fs-6">@Model?.Count() events</span>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-primary text-center p-4 rounded-4">No events yet. Check back soon!</div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var e in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+                        <div class="p-3 text-white" style="background: #000000; border-bottom: 4px solid #0d6efd;">
+                            <small class="text-uppercase fw-bold" style="color:#4da3ff;">📍 @e.location</small>
+                            <h5 class="fw-bold mb-0 mt-1 text-capitalize">@e.name</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted mb-1">@e.eventDate - @e.eventTime</p>
+                            <p class="mb-3">@e.description</p>
+                            <a href="/Home/Details/@e.eventID" class="btn btn-primary w-100 rounded-3 fw-bold">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
