@@ -1,0 +1,13 @@
+@model RaceDay.MVC.Models.events
+<h2>@Model.name</h2>
+<p><b>Description:</b> @Model.description</p>
+<p><b>Date:</b> @Model.eventDate</p>
+<p><b>Time:</b> @Model.eventTime</p>
+<p><b>Location:</b> @Model.location</p>
+<p><b>Distance:</b> @Model.distance</p>
+<form method="post" action="/Participant/Enter">
+    <input type="hidden" name="eventId" value="@Model.eventID" />
+    <button type="submit" class="btn btn-success">Enter Event</button>
+</form>
+<br />
+<a href="/Participant/Index">Back to Events</a>
