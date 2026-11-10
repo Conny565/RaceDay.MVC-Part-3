@@ -1,0 +1,113 @@
+using Microsoft.AspNetCore.Mvc;
+using RaceDay.MVC.Models;
+using RaceDay.MVC.Services;
+
+namespace RaceDay.MVC.Controllers
+{
+    public class OrganiserController : Controller
+    {
+        private readonly ApiService _api;
+
+        public OrganiserController(ApiService api)
+        {
+            _api = api;
+        }
+
+        // /Organiser/Dashboard
+        public async Task<IActionResult> Dashboard()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            if (userId == null) return RedirectToAction("Login", "Account");
+
+            var events = await _api.GetEvents();
+            var mine = events.Where(e => e.userID.ToString() == userId).ToList();
+            return View(mine);
+        }
+
+        // /Organiser/MyEvents
+        public async Task<IActionResult> MyEvents()
+        {
+            var userId = HttpContext.Session.GetString("UserId");
+            if (userId == null) return RedirectToAction("Login", "Account");
+
+            var events = await _api.GetEvents();
+            var mine = events.Where(e => e.userID.ToString() == userId).ToList();
+            return View(mine);
+        }
+
+        // /Organiser/Create
+        public IActionResult Create()
+        {
+            if (HttpContext.Session.GetString("UserId") == null)
+                return RedirectToAction("Login", "Account");
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(events model, IFormFile bannerImage)
+        {
+            model.userID = int.Parse(HttpContext.Session.GetString("UserId"));
+
+            if (bannerImage != null)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(bannerImage.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                using var stream = new FileStream(path, FileMode.Create);
+                await bannerImage.CopyToAsync(stream);
+                model.imagePath = "/images/" + fileName;
+            }
+
+            await _api.CreateEvent(model);
+            return RedirectToAction("MyEvents");
+        }
+
+        // /Organiser/Edit/1
+        public async Task<IActionResult> Edit(int id)
+        {
+            var ev = await _api.GetEvent(id);
+            if (ev == null) return NotFound();
+            return View(ev);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(events model, IFormFile bannerImage)
+        {
+            if (bannerImage != null)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(bannerImage.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                using var stream = new FileStream(path, FileMode.Create);
+                await bannerImage.CopyToAsync(stream);
+                model.imagePath = "/images/" + fileName;
+            }
+
+            await _api.UpdateEvent(model.eventID, model);
+            return RedirectToAction("MyEvents");
+        }
+
+        // /Organiser/Delete/1
+        public async Task<IActionResult> Delete(int id)
+        {
+            var ev = await _api.GetEvent(id);
+            if (ev == null) return NotFound();
+            return View(ev);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _api.DeleteEvent(id);
+            return RedirectToAction("MyEvents");
+        }
+
+        // /Organiser/Enrolments/1 - View who entered my event
+        public async Task<IActionResult> Enrolments(int id)
+        {
+            var list = await _api.GetEnrolmentsForEventAsync(id);
+            ViewBag.EventId = id;
+            return View(list);
+        }
+    }
+}
