@@ -1,0 +1,21 @@
+@model List<RaceDay.MVC.Models.events>
+<h2>My Events</h2>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (!Model.Any())
+{
+    <p>You have not entered any events yet. <a href="/Participant/Index">Browse Events</a></p>
+}
+@foreach (var e in Model)
+{
+    <div class="card p-3 mb-2">
+        <h4>@e.name</h4>
+        <p>@e.eventDate - @e.location - @e.distance</p>
+    </div>
+}
