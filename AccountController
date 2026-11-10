@@ -1,0 +1,61 @@
+using Microsoft.AspNetCore.Mvc;
+using RaceDay.MVC.Models;
+using RaceDay.MVC.Services;
+
+namespace RaceDay.MVC.Controllers
+{
+    public class AccountController : Controller
+    {
+        private readonly ApiService _api;
+        public AccountController(ApiService api) { _api = api; }
+
+        [HttpGet]
+        public IActionResult Login() { return View(); }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            var user = await _api.Login(username, password);
+            if (user == null)
+            {
+                ViewBag.Error = "Wrong username or password";
+                return View();
+            }
+
+            // Save EVERY key name your Profile / Dashboard might look for
+            HttpContext.Session.SetString("UserId", user.userID.ToString());
+            HttpContext.Session.SetString("UserID", user.userID.ToString());
+            HttpContext.Session.SetString("Username", user.fullName ?? "");
+            HttpContext.Session.SetString("UserName", user.fullName ?? "");
+            HttpContext.Session.SetString("Name", user.fullName ?? "");
+            HttpContext.Session.SetString("FullName", user.fullName ?? "");
+            HttpContext.Session.SetString("Email", username ?? "");
+            HttpContext.Session.SetString("UserEmail", username ?? "");
+            HttpContext.Session.SetString("Role", user.role ?? "");
+            HttpContext.Session.SetString("UserRole", user.role ?? "");
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(Users user)
+        {
+            var ok = await _api.Register(user);
+            if (ok) return RedirectToAction("Login");
+            ViewBag.Error = "Could not register - email may already exist";
+            return View(user);
+        }
+    }
+}
