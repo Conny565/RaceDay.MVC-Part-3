@@ -1,0 +1,7 @@
+@model RaceDay.MVC.Models.events
+<h2>Delete Event?</h2>
+<p>Are you sure you want to delete <b>@Model.name</b>?</p>
+<form asp-action="Delete" method="post">
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="MyEvents" class="btn btn-secondary">Cancel</a>
+</form>
