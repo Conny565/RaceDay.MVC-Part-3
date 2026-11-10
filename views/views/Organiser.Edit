@@ -1,0 +1,47 @@
+@model RaceDay.MVC.Models.events
+<h2>Edit Event</h2>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="eventID" />
+    <input type="hidden" asp-for="userID" />
+
+    <label>Name</label>
+    <input asp-for="name" class="form-control" required />
+
+    <label>Description</label>
+    <textarea asp-for="description" class="form-control"></textarea>
+
+    <label>Date</label>
+    <input asp-for="eventDate" type="date" class="form-control" required />
+
+    <label>Time</label>
+    <input asp-for="eventTime" class="form-control" />
+
+    <label>Location</label>
+    <input asp-for="location" class="form-control" />
+
+    <label>Distance (e.g. 5km)</label>
+    <input asp-for="distance" class="form-control" />
+
+    <label>Event Type</label>
+    <select asp-for="eventType" class="form-control">
+        <option>Run</option>
+        <option>Cycle</option>
+        <option>Swim</option>
+        <option>Triathlon</option>
+    </select>
+
+    <label>Current Image</label><br />
+    @if (!string.IsNullOrEmpty(Model.imagePath))
+    {
+        <img src="@Model.imagePath" width="200" />
+        <input type="hidden" asp-for="imagePath" />
+    }
+    <br /><br />
+
+    <label>Change Banner Image (optional)</label>
+    <input type="file" name="bannerImage" class="form-control" />
+
+    <br />
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="MyEvents" class="btn btn-secondary">Cancel</a>
+</form>
